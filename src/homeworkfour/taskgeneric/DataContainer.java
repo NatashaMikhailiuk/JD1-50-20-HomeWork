@@ -3,6 +3,7 @@ package homeworkfour.taskgeneric;
 import java.util.Arrays;
 import java.util.Comparator;
 
+
 public class DataContainer<T> {
     private T[] data;
     private final int DEFAULT_SIZE = 10;
@@ -15,7 +16,8 @@ public class DataContainer<T> {
 
     public int add(T item) {
         if (lastIndex > data.length - 1) {
-            data = Arrays.copyOf(data, data.length + 1);
+            data = Arrays.copyOf(data, data.length * 2);/* не уверена что лучше, задействовать процессор
+                                                                    или память*, решилась все же на память*/
             data[lastIndex] = item;
             lastIndex++;
             return lastIndex - 1;
@@ -77,6 +79,21 @@ public class DataContainer<T> {
             T t = data[maxIndex];
             data[maxIndex] = data[i];
             data[i] = t;
+        }
+    }
+
+    public static <T> void sort1(DataContainer<T> dataContainer) {
+        T[] containerData = dataContainer.getItems();
+        for (int i = 0; i < containerData.length; i++) {
+            int maxIndex = i;
+            for (int j = i; j < containerData.length; j++) {
+                if (containerData[j] != null && ((Comparable) containerData[maxIndex]).compareTo(containerData[j]) > 0) {
+                    maxIndex = j;
+                }
+            }
+            T t = containerData[maxIndex];
+            containerData[maxIndex] = containerData[i];
+            containerData[i] = t;
         }
     }
 

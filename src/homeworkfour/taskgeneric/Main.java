@@ -9,7 +9,6 @@ public class Main {
         DataContainer<Integer> data = new DataContainer<>();
         DataContainerComparator comparator = new DataContainerComparator();
 
-
         System.out.print(data.add(15) + " ");
         System.out.print(data.add(25) + " ");
         System.out.print(data.add(115) + " ");
@@ -40,6 +39,19 @@ public class Main {
         System.out.println("Удаление элемента по самому элементу: " + data1.deleteItem("Sergey"));
         System.out.println("Массив после удаления по элементу: " + Arrays.toString(data1.getItems()));
         System.out.println("Массив после сортировки с выводом своего toString: " + data1.toString());
+
+        DataContainer<String> data2 = new DataContainer<>();
+
+        System.out.print(data2.add("Natasha") + " ");
+        System.out.print(data2.add("Pasha") + " ");
+        System.out.print(data2.add("Masha") + " ");
+        System.out.print(data2.add("Anton") + " ");
+        System.out.print(data2.add("Sergey") + " " + "" + "\n");
+        System.out.println("Массив: " + Arrays.toString(data2.getItems()));
+        DataContainer.sort1(data2);
+        System.out.println("Массив после сортировки: " + Arrays.toString(data2.getItems()));
+        System.out.println("Массив после сортировки с выводом своего toString: " + data2.toString());
+
     }
 }
 
