@@ -1,79 +1,149 @@
 package homeworkfour.taskstring;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
+
 
 public class Main {
     public static void main(String[] args) {
-        NumberUtils str = new NumberUtils();
-        int num1;
-        double num2;
-        int num3;
-        long num4;
-
+        NumberUtils numberUtils = new NumberUtils();
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Choose the correct point:\n 1 - if you wish to write the int number in letters; " +
-                "\n 2 - if you wish to write the double number in letters; " +
-                "\n 3 - if you wish to know the number of week;  " +
-                "\n 4 - if you wish to know the time instead of milliseconds; " + "\n");
-        int num = scanner.nextInt();
-        while (num > 4) {
-            System.out.print("You should choose the correct point, try again...." + "\n");
-            System.out.print("Input the number of point: ");
-            num = scanner.nextInt();
+        int numberPoint = getPoints(scanner);
+
+        if (numberPoint == 1) {
+            getIntNumberToString(numberUtils, scanner);
         }
-        if (num == 1) {
-            print();
-            num1 = scanner.nextInt();
-            while (num1 > 999_999_999) {
-                System.out.print("The number should be no longer 999 999 999, try again...." + "\n");
-                print();
-                num1 = scanner.nextInt();
-            }
-            System.out.println(str.toStringInt(num1));
+        if (numberPoint == 2) {
+            getDoubleNumberToString(numberUtils, scanner);
         }
-        if (num == 2) {
-            print();
-            num2 = scanner.nextDouble();
-            while (num2 > 999_999_999) {
-                System.out.print("The number should be no longer 999 999 999.999999999, try again...." + "\n");
-                print();
-                num2 = scanner.nextDouble();
-            }
-            System.out.println(str.toStringDouble(num2));
+        if (numberPoint == 3) {
+            getNumberOfWeekToString(numberUtils, scanner);
         }
-        if (num == 3) {
-            print();
-            num3 = scanner.nextInt();
-            while (num3 > 365) {
-                System.out.print("The number should be no longer 365, try again...." + "\n");
-                print();
-                num3 = scanner.nextInt();
-            }
-            System.out.println(str.toWeek(num3));
+        if (numberPoint == 4) {
+            getMillisecondsToString(numberUtils, scanner);
         }
-        if (num == 4) {
-            System.out.println("1 - If you wish 00:00:00.000 format" +
-                    "\n2 - If you wish __hours__minutes__seconds__milliseconds format");
-            int num5 = scanner.nextInt();
-            while (num5 > 2) {
-                System.out.print("You should choose the correct point, try again...." + "\n");
-                System.out.print("Input the number of point: ");
-                num5 = scanner.nextInt();
+        scanner.close();
+    }
+
+    private static int getPoints(Scanner scanner) {
+        int numberPoint = -1;
+        while (numberPoint <= 0 || numberPoint > 4) {
+            try {
+                printPoints();
+                numberPoint = scanner.nextInt();
+            } catch (InputMismatchException exception) {
+                String wrongInput = scanner.nextLine();
+                printException(wrongInput);
             }
-            if (num5 == 1) {
-                print();
-                num4 = scanner.nextLong();
-                System.out.println(str.toHoursMinuteSecondMillisecond(num4, true));
+        }
+        return numberPoint;
+    }
+
+    private static void getIntNumberToString(NumberUtils numberUtils, Scanner scanner) {
+        int value = -1;
+        while (value < 0 || value > 999_999_999) {
+            try {
+                printNumber();
+                printNumberAgain();
+                value = scanner.nextInt();
+            } catch (InputMismatchException exception) {
+                String wrongInput = scanner.nextLine();
+                printException(wrongInput);
             }
-            if (num5 == 2) {
-                print();
-                num4 = scanner.nextLong();
-                System.out.println(str.toHoursMinuteSecondMillisecond(num4, false));
+        }
+        System.out.println(numberUtils.toStringInt(value));
+    }
+
+    private static void getDoubleNumberToString(NumberUtils numberUtils, Scanner scanner) {
+        double value = -1;
+        while (value < 0 || value > 999_999_999) {
+            try {
+                printNumber();
+                printNumberAgain();
+                value = scanner.nextDouble();
+            } catch (InputMismatchException exception) {
+                String wrongInput = scanner.nextLine();
+                printException(wrongInput);
             }
+        }
+        System.out.println(numberUtils.toStringDouble(value));
+    }
+
+    private static void getNumberOfWeekToString(NumberUtils numberUtils, Scanner scanner) {
+        int value = -1;
+        while (value < 0 || value > 365) {
+            try {
+                printNumber();
+                System.out.println("The number should be no longer 365, try again...");
+                value = scanner.nextInt();
+            } catch (InputMismatchException exception) {
+                String wrongInput = scanner.nextLine();
+                printException(wrongInput);
+            }
+        }
+        System.out.println(numberUtils.toWeek(value));
+    }
+
+    private static void getMillisecondsToString(NumberUtils numberUtils, Scanner scanner) {
+        int pointNumber = -1;
+        while (pointNumber < 0 || pointNumber > 2) {
+            try {
+                printPointsForTime();
+                pointNumber = scanner.nextInt();
+            } catch (InputMismatchException exception) {
+                String wrongInput = scanner.nextLine();
+                printException(wrongInput);
+            }
+        }
+        if (pointNumber == 1) {
+            long value = -1L;
+            while (value < 0 || value > 999_999_999) {
+                try {
+                    printNumber();
+                    value = scanner.nextLong();
+                } catch (InputMismatchException exception) {
+                    String wrongInput = scanner.nextLine();
+                    printException(wrongInput);
+                }
+            }
+            System.out.println(numberUtils.toHoursMinuteSecondMillisecond(value, true));
+        }
+        if (pointNumber == 2) {
+            long value = -1;
+            while (value < 0 || value > 999_999_999) {
+                try {
+                    printNumber();
+                    value = scanner.nextLong();
+                } catch (InputMismatchException exception) {
+                    String wrongInput = scanner.nextLine();
+                    printException(wrongInput);
+                }
+            }
+            System.out.println(numberUtils.toHoursMinuteSecondMillisecond(value, false));
         }
     }
 
-    public static void print() {
+    private static void printPoints() {
+        System.out.print("Choose the necessary point:\n 1 - if you wish to write the int number in letters; " +
+                "\n 2 - if you wish to write the double number in letters; " +
+                "\n 3 - if you wish to know the number of week;  " +
+                "\n 4 - if you wish to know the time instead of milliseconds; " + "\n");
+    }
+
+    private static void printNumber() {
         System.out.println("Please, write the number: ");
+    }
+
+    private static void printNumberAgain() {
+        System.out.print("The number should be no long 999 999 999, try again....");
+    }
+
+    private static void printPointsForTime() {
+        System.out.println("1 - If you wish 00:00:00.000 format" +
+                "\n2 - If you wish __hours__minutes__seconds__milliseconds format");
+    }
+
+    private static void printException(String wrongInput) {
+        System.out.println("The input " + "\"" + wrongInput + "\"" + " is incorrect, try again....");
     }
 }

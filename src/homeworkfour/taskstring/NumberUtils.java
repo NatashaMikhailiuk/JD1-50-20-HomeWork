@@ -3,7 +3,7 @@ package homeworkfour.taskstring;
 public class NumberUtils {
     private final static String[] MILLION = {"миллион", "миллиона", "миллионов"};
     private final static String[] HUNDREDS = {"тысяча", "тысячи", "тысяч"};
-    private final static String[] HUNDREDS_AFTER_POINT = {"сотая", "сотые", "сотых"};
+    private final static String[] HUNDREDS_AFTER_POINT = {" сотая", " сотые", " сотых"};
     private final static String[] WEEK = {"неделя", "недели", "недель"};
     private final static String[] HOURS = {" час ", " часа ", " часов "};
     private final static String[] MINUTES = {" минута ", " минуты ", " минут "};
@@ -90,6 +90,9 @@ public class NumberUtils {
         int millions = 1000000;
         int thousands = 1000;
         String inLetters = "";
+        if (number == 0){
+            inLetters = "ноль";
+        }
         if (number / millions != 0) {
             inLetters += translateHundredToWord((number / millions)) + " "
                     + getDeclension((number / millions), MILLION);
@@ -260,7 +263,7 @@ public class NumberUtils {
             case 19:
                 return "девятнадцать";
             default:
-                return "не найдено";
+                return "ноль";
         }
     }
 
