@@ -3,9 +3,10 @@ package homeworksix.runner;
 import homeworksix.entity.Person;
 import homeworksix.service.PersonService;
 import homeworksix.service.cleaner.CollectionCleaner;
-import homeworksix.service.creator.CollectionCreator;
 import homeworksix.service.comparator.PersonPasswordAndNickComparator;
+import homeworksix.service.creator.CollectionCreator;
 import homeworksix.service.iterator.CollectionIterator;
+
 import java.util.*;
 
 public class PersonMain {
@@ -13,8 +14,8 @@ public class PersonMain {
         int sizeOfCollection = 100000;
 
         CollectionCreator creator = new CollectionCreator();
-        CollectionIterator iterator = new CollectionIterator();
-        CollectionCleaner cleaner = new CollectionCleaner();
+        CollectionIterator<Person> iterator = new CollectionIterator<>();
+        CollectionCleaner<Person> cleaner = new CollectionCleaner<>();
 
         PersonService personService = new PersonService(creator, iterator, cleaner);
 

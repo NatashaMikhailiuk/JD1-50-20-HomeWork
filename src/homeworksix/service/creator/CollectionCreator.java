@@ -9,7 +9,6 @@ import java.util.Random;
 
 public class CollectionCreator {
     private int sizeOfCollection;
-
     private final NumberUtils timeFormat = new NumberUtils();
 
     public CollectionCreator(int sizeOfCollection) {

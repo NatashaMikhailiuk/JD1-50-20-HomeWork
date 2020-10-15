@@ -1,5 +1,6 @@
 package homeworksix.utils.creator;
 
+import java.io.File;
 import java.util.Random;
 
 public class FieldsCreator {
@@ -7,6 +8,8 @@ public class FieldsCreator {
     private static final char[] allLettersLowerCase = ("zxcvbnmasdfghjklqwertyuiop").toCharArray();
     private static final char[] allChar = ("ZXCVBNMASDFGHJKLQWERTYUIOP0123456789").toCharArray();
     private static final int[] numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+    private static final String RESOURCES_PATH = "homework" + File.separator + "resources" + File.separator;
+
 
     private static final Random rnd = new Random();
     StringBuilder builder1 = new StringBuilder();
@@ -40,10 +43,7 @@ public class FieldsCreator {
     }
 
     public String createNickFromListOfNames() {
-        String names = "C:/it-academy/home work/task 6/names.txt";
-        names = TextReader.readAllBytesJava7(names);
-        names = names.replace(",", "");
-        String[] words = names.split("\\s+");
+        String[] words = readFileToWordsArray("names.txt");
         return words[rnd.nextInt(51530)];
     }
 
@@ -56,10 +56,15 @@ public class FieldsCreator {
     }
 
     public String createNameForPetFromTheListOfNames() {
-        String names = "C:/it-academy/home work/task 6/pet_niks.txt";
-        names = TextReader.readAllBytesJava7(names);
-        names = names.replace(",", "");
-        String[] words = names.split("\\s+");
+        String[] words = readFileToWordsArray("pet_niks.txt");
         return words[rnd.nextInt(1330)];
+    }
+
+    private String[] readFileToWordsArray(String fileName) {
+        String path = RESOURCES_PATH + fileName;
+        path = TextReader.readAllBytesJava7(path);
+        path = path.replace(",", "");
+        String[] words = path.split("\\s+");
+        return words;
     }
 }

@@ -1,6 +1,7 @@
 package homeworkfive;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -8,7 +9,8 @@ import java.util.*;
 
 public class MainWarAndPeace {
     public static void main(String[] args) {
-        String fileWarAndPeace = "C:/it-academy/home work/task 5/Война и мир_книга.txt";
+        String path = "homework" + File.separator + "resources" + File.separator;
+        String fileWarAndPeace = path + "Война и мир_книга.txt";
         fileWarAndPeace = readAllBytesJava7(fileWarAndPeace);
         fileWarAndPeace = fileWarAndPeace.replaceAll("\\s{2,}", " ");
         fileWarAndPeace = fileWarAndPeace.replaceAll("([.,^=:'*;!?\"()]+)|([a-zA-Z]+)|([-]{2,})", "");

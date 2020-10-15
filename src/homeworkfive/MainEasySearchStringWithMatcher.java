@@ -1,8 +1,11 @@
 package homeworkfive;
 
+import java.io.File;
+
 public class MainEasySearchStringWithMatcher {
     public static void main(String[] args) {
-        String text = "C:/it-academy/home work/task 5/Война и мир_книга.txt";
+        String path = "homework" + File.separator + "resources" + File.separator;
+        String text = path + "Война и мир_книга.txt";
         text = MainWarAndPeace.readAllBytesJava7(text);
         String word1 = "война";
         String word2 = "мир";

@@ -2,9 +2,9 @@ package homeworksix.runner;
 
 import homeworksix.entity.Animal;
 import homeworksix.service.AnimalService;
+import homeworksix.service.cleaner.CollectionCleaner;
 import homeworksix.service.comparator.AnimalAgeAndNameComparator;
 import homeworksix.service.creator.CollectionCreator;
-import homeworksix.service.cleaner.CollectionCleaner;
 import homeworksix.service.iterator.CollectionIterator;
 
 import java.util.*;
@@ -14,8 +14,8 @@ public class AnimalMain {
         int sizeOfCollection = 100000;
 
         CollectionCreator creator = new CollectionCreator();
-        CollectionIterator iterator = new CollectionIterator();
-        CollectionCleaner cleaner = new CollectionCleaner();
+        CollectionIterator<Animal> iterator = new CollectionIterator<>();
+        CollectionCleaner<Animal> cleaner = new CollectionCleaner<>();
 
         AnimalService animalService = new AnimalService(creator, iterator, cleaner);
 
