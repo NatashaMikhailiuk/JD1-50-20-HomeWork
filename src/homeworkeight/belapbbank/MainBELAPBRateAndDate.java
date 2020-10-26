@@ -3,50 +3,50 @@ package homeworkeight.belapbbank;
 import homeworkeight.SiteLoaderBelapb;
 import homeworkeight.utils.DateUtil;
 import homeworkeight.utils.ScannerHelper;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class MainBELAPBRateAndDate {
+    private static final String FILE_NAME = "BELAPBBankCurrency.txt";
     private static SiteLoaderBelapb loader = new BELAPBLoaderRateAndDate();
+    private static DateTimeFormatter dateToStringFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+
 
     public static void main(String[] args) {
 
-        DateTimeFormatter dateToStringFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        String fileName = "BELAPBBankCurrency.txt";
-        Set<LocalDate> dates = new TreeSet<>();
-        DateUtil.getDates(args, dates);
-        String path = ScannerHelper.scannerHelper(fileName);
+        Set<LocalDate> dates = DateUtil.getDates(args);
+        String path = ScannerHelper.scannerHelper(FILE_NAME);
+        getRate(dates, dateToStringFormatter, path);
 
+    }
+
+    private static void getRate(Set<LocalDate> dates, DateTimeFormatter dateToStringFormatter, String path) {
         for (LocalDate date : dates) {
-            String dateStr = date.format(dateToStringFormatter);
-            printRates(dateStr);
-            saveToFile(path, dateStr);
+            String dateForSite = date.format(dateToStringFormatter);
+            saveRateToFileAndPrint(path, dateForSite);
         }
     }
 
-    public static void printRates(String date) {
-        System.out.println("EUR: " + loader.load(SiteLoaderBelapb.Currency.EUR, date));
-        System.out.println("RUB: " + loader.load(SiteLoaderBelapb.Currency.RUB, date));
-        System.out.println("USD: " + loader.load(SiteLoaderBelapb.Currency.USD, date));
-    }
-
-    private static void saveToFile(String path, String date) {
+    private static void saveRateToFileAndPrint(String path, String date) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path, true))) {
             writer.write("Date: " + date + "\r\n");
-            writer.write(SiteLoaderBelapb.Currency.USD + ": ");
-            writer.write((loader.load(SiteLoaderBelapb.Currency.USD, date)) + " ");
-            writer.write(SiteLoaderBelapb.Currency.EUR + ": ");
-            writer.write((loader.load(SiteLoaderBelapb.Currency.EUR, date)) + " ");
-            writer.write(SiteLoaderBelapb.Currency.RUB + ": ");
-            writer.write((loader.load(SiteLoaderBelapb.Currency.RUB, date)) + " ");
+            double rateUSD = loader.load(SiteLoaderBelapb.Currency.USD, date);
+            writer.write("USD: " + rateUSD + " ");
+            double rateEUR = loader.load(SiteLoaderBelapb.Currency.EUR, date);
+            writer.write("EUR: " + rateEUR + " ");
+            double rateRUB = loader.load(SiteLoaderBelapb.Currency.RUB, date);
+            writer.write("RUB: " + rateRUB + " ");
+            System.out.println("USD: " + rateUSD);
+            System.out.println("EUR: " + rateEUR);
+            System.out.println("RUB: " + rateRUB);
             writer.write("\r\n");
         } catch (IOException ex) {
-            System.out.println(ex.getMessage());
+            System.out.println(ex.getMessage() + " The path is incorrect");
         }
     }
 }

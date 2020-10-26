@@ -2,40 +2,39 @@ package homeworkeight.nbrbbank;
 
 import homeworkeight.SiteLoader;
 import homeworkeight.utils.ScannerHelper;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 
 public class MainNBRB {
-    public static void main(String[] args) {
-        String fileName = "NBRBBankCurrency.txt";
-        String path = ScannerHelper.scannerHelper(fileName);
-        printRates(new NBRBLoader());
+    private static final String FILE_NAME = "NBRBBankCurrency.txt";
+    private static SiteLoader loader = new NBRBLoader();
 
+    public static void main(String[] args) {
+
+        String path = ScannerHelper.scannerHelper(FILE_NAME);
+        writeRatesToFileAndPrint(path);
+
+    }
+
+    private static void writeRatesToFileAndPrint(String path) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
-            writeRatesToFile(writer);
+            LocalDate localDate = LocalDate.now();
+            writer.write("Date: " + localDate + "\r\n");
+            double rateUSD = loader.load(SiteLoader.Currency.USD);
+            writer.write("USD: " + rateUSD + " ");
+            double rateEUR = loader.load(SiteLoader.Currency.EUR);
+            writer.write("EUR: " + rateEUR + " ");
+            double rateRUB = loader.load(SiteLoader.Currency.RUB);
+            writer.write("RUB: " + rateRUB + " ");
+            System.out.println("USD: " + rateUSD);
+            System.out.println("EUR: " + rateEUR);
+            System.out.println("RUB: " + rateRUB);
+            writer.write("\r\n");
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
-    }
-
-
-    public static void printRates(SiteLoader loader) {
-        System.out.println("EUR: " + loader.load(SiteLoader.Currency.EUR));
-        System.out.println("RUB: " + loader.load(SiteLoader.Currency.RUB));
-        System.out.println("USD: " + loader.load(SiteLoader.Currency.USD));
-    }
-
-    private static void writeRatesToFile(BufferedWriter writer) throws IOException {
-        writer.write(SiteLoader.Currency.USD + ": ");
-        writer.write((new NBRBLoader().load(SiteLoader.Currency.USD)) + " ");
-        writer.write(SiteLoader.Currency.EUR + ": ");
-        writer.write((new NBRBLoader().load(SiteLoader.Currency.EUR)) + " ");
-        writer.write(SiteLoader.Currency.RUB + ": ");
-        writer.write((new NBRBLoader().load(SiteLoader.Currency.RUB)) + " ");
-    }
-
-    private static void printException(String wrongInput) {
-        System.out.println("The input " + "\"" + wrongInput + "\"" + " is incorrect, try again....");
     }
 }

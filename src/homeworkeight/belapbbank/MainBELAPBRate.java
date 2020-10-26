@@ -2,36 +2,40 @@ package homeworkeight.belapbbank;
 
 import homeworkeight.SiteLoader;
 import homeworkeight.utils.ScannerHelper;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 
 public class MainBELAPBRate {
+    public static final String FILE_NAME = "BELAPBBankCurrency.txt";
+    private static SiteLoader loader = new BELAPBLoaderRate();
+
     public static void main(String[] args) {
-        String fileName = "BELAPBBankCurrency.txt";
-        String path = ScannerHelper.scannerHelper(fileName);
-        printRates(new BELAPBLoaderRate());
+
+        String path = ScannerHelper.scannerHelper(FILE_NAME);
+        writeRatesToFile(path);
+    }
 
 
+    private static void writeRatesToFile(String path) {
+        LocalDate localDate = LocalDate.now();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
-            writeRatesToFile(writer);
+            writer.write("Date: " + localDate + "\r\n");
+            double rateUSD = loader.load(SiteLoader.Currency.USD);
+            writer.write("USD: " + rateUSD + " ");
+            double rateEUR = loader.load(SiteLoader.Currency.EUR);
+            writer.write("EUR: " + rateEUR + " ");
+            double rateRUB = loader.load(SiteLoader.Currency.RUB);
+            writer.write("RUB: " + rateRUB + " ");
+            System.out.println("USD: " + rateUSD);
+            System.out.println("EUR: " + rateEUR);
+            System.out.println("RUB: " + rateRUB);
+            writer.write("\r\n");
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
     }
-
-    public static void printRates(SiteLoader loader) {
-        System.out.println("EUR: " + loader.load(SiteLoader.Currency.EUR));
-        System.out.println("RUB: " + loader.load(SiteLoader.Currency.RUB));
-        System.out.println("USD: " + loader.load(SiteLoader.Currency.USD));
-    }
-
-    private static void writeRatesToFile(BufferedWriter writer) throws IOException {
-        writer.write(SiteLoader.Currency.USD + ": ");
-        writer.write((new BELAPBLoaderRate().load(SiteLoader.Currency.USD)) + " ");
-        writer.write(SiteLoader.Currency.EUR + ": ");
-        writer.write((new BELAPBLoaderRate().load(SiteLoader.Currency.EUR)) + " ");
-        writer.write(SiteLoader.Currency.RUB + ": ");
-        writer.write((new BELAPBLoaderRate().load(SiteLoader.Currency.RUB)) + " ");
-    }
 }
+
