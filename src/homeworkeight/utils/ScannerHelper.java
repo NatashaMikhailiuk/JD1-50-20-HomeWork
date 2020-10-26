@@ -25,14 +25,26 @@ public class ScannerHelper {
                 printException(wrongInput);
             }
         if (decisionOfUser == 1) {
-            try {
+            boolean isValidPath = false;
+            int count = 0;
+            while (!isValidPath) {
                 System.out.println("Please, write the path");
-                path = SCANNER.next() + File.separator + fileName;
-                System.out.println("The File path and name is : " + path);
-            } catch (InputMismatchException exception) {
-                String wrongInput = SCANNER.nextLine();
-                printException(wrongInput);
-
+                path = SCANNER.next();
+                File file = new File(path);
+                if (file.exists()) {
+                    path = path + File.separator + fileName;
+                    isValidPath = true;
+                    System.out.println("The File path and name is : " + path);
+                }
+                if (!file.exists()) {
+                    if (count < 4) {
+                        System.out.println(path + " is not valid");
+                        count++;
+                    } else {
+                        System.out.println("The path still is not correct, the programme has finished work");
+                        System.exit(1);
+                    }
+                }
             }
         }
         if (decisionOfUser == 2) {
