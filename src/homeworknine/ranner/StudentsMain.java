@@ -4,9 +4,10 @@ import homeworknine.entity.Student;
 import homeworknine.service.collectioncreator.StudentCreator;
 import homeworknine.service.comparator.StudentMarkComparator;
 import homeworknine.service.comparator.StudentNameComparator;
+import homeworknine.service.filereader.FileReaderService;
+import homeworknine.service.filewriter.FileWriterService;
 import homeworknine.utils.ScannerHelper;
 
-import java.io.*;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -21,21 +22,27 @@ public class StudentsMain {
     public static void main(String[] args) {
         String path;
         int topNStudentsFromList;
+        int sizeOfStudentList;
         StudentMarkComparator markComparator = new StudentMarkComparator();
         StudentNameComparator nameComparator = new StudentNameComparator();
         Scanner scanner = new Scanner(System.in);
+        FileWriterService writer;
+        FileReaderService read;
 
-        int sizeOfStudentList = 10_000;
+
+        sizeOfStudentList = 10_000;
         List<Student> studentList = Stream
                 .generate(StudentCreator::createStudent)
                 .limit(sizeOfStudentList)
                 .collect(Collectors.toList());
 
-        writeToTxtFile(studentList, FILENAME_TXT);
-        writeToFileBin(studentList, FILENAME_BIN);
+        writer = new FileWriterService(studentList, FILENAME_TXT, FILENAME_BIN);
+        writer.writeToTxtFile();
+        writer.writeToFileBin();
 
         path = ScannerHelper.scanFromConsole(scanner, FILENAME_BIN);
-        readFromFile(path);
+        read = new FileReaderService(path);
+        read.readFromFile();
 
         topNStudentsFromList = 100;
         List<Student> topStudentList = studentList
@@ -45,41 +52,8 @@ public class StudentsMain {
                 .sorted(nameComparator)
                 .collect(Collectors.toList());
 
-        writeToTxtFile(topStudentList, FILENAME_TOP_TXT);
-        writeToFileBin(topStudentList, FILENAME_TOP_BIN);
-    }
-
-    private static void writeToTxtFile(List<Student> list, String fileName) {
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
-            writer.write(String.valueOf(list));
-            writer.close();
-        } catch (IOException ex) {
-            System.out.println("Some problem with writing to file: " + ex.getMessage());
-        }
-    }
-
-    private static void writeToFileBin(List<Student> list, String fileName) {
-        try {
-            FileOutputStream fos = new FileOutputStream(fileName);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(list);
-        } catch (Exception ex) {
-            System.out.println("Some problem with writing to file: " + ex.getMessage());
-        }
-    }
-
-    private static void readFromFile(String path) {
-        try {
-            FileInputStream fis = new FileInputStream(path);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            System.out.println(ois.readObject());
-        } catch (FileNotFoundException ex) {
-            System.out.println("Some problem with reading(FileNotFoundException): " + ex.getMessage());
-        } catch (IOException ex) {
-            System.out.println("Some problem with reading(IOException): " + ex.getMessage());
-        } catch (ClassNotFoundException ex) {
-            System.out.println("Some problem with reading(ClassNotFoundException): " + ex.getMessage());
-        }
+        writer = new FileWriterService(topStudentList, FILENAME_TOP_TXT, FILENAME_TOP_BIN);
+        writer.writeToTxtFile();
+        writer.writeToFileBin();
     }
 }
